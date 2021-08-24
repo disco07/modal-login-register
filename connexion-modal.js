@@ -31,14 +31,14 @@ const tabs = () => {
 
 
 let modal = null
-const openModal = function(e) {
+const openModal = async function(e) {
     e.preventDefault()
+    const target = e.target.getAttribute('href')
+    modal = await loadModal(target)
     tabs()
-    const target = document.querySelector(e.target.getAttribute('href'))
-    target.style.display = null;
-    target.removeAttribute('aria-hidden')
-    target.setAttribute('aria-modal', true)
-    modal = target
+    modal.style.display = null;
+    modal.removeAttribute('aria-hidden')
+    modal.setAttribute('aria-modal', true)
     modal.addEventListener('click', closeModal)
     modal.querySelector('.modal-close').addEventListener('click', closeModal)
     modal.querySelector('.js-modal-stop').addEventListener('click', stopPropagation)
@@ -60,12 +60,24 @@ const stopPropagation = function(e) {
     e.stopPropagation()
 }
 
+const loadModal = async function(url) {
+    // ajouter un loader
+    const target = '#' + url.split('#')[1]
+    const existingModal = document.querySelector(target)
+    if (existingModal !== null) return existingModal
+    const html = await fetch(url).then(response => response.text())
+    const element = document.createRange().createContextualFragment(html).querySelector(target)
+    if (element === null) throw `L'element n'a pas été trouvé dans ${target}`
+    document.body.append(element)
+    return element
+}
+
 document.querySelectorAll('.js-modal').forEach(m => {
     m.addEventListener('click', openModal)
 })
 
 window.addEventListener('keydown', function(e) {
-    if (e.hey === 'Escape' || e.key === 'Esc') {
+    if (e.key === 'Escape' || e.key === 'Esc') {
         closeModal(e)
     }
 })
