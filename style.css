@@ -125,7 +125,7 @@ body, html {
   padding: 5px;
 }
 
-.btn {
+.button-social {
   width: 100%;
   padding: 12px;
   border: none;
@@ -138,16 +138,16 @@ body, html {
   text-decoration: none;
 }
 
-.btn:hover {
+.button-social:hover {
   opacity: 1;
 }
 
-.fb {
+.fb-btn {
   background-color: #3B5998;
   color: white;
 }
 
-.google {
+.google-btn {
   background-color: #dd4b39;
   color: white;
 }
